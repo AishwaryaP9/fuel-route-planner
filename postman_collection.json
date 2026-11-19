@@ -1,0 +1,632 @@
+{
+  "info": {
+    "name": "Fuel Route Planner",
+    "description": "Requests for the Fuel Route Planner API. Set the `base` variable to the server address (default http://127.0.0.1:8000). Distances are in miles and fuel in gallons.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base",
+      "value": "http://127.0.0.1:8000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Route plans",
+      "item": [
+        {
+          "name": "Default vehicle: New York -> Los Angeles",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=New York, NY&finish=Los Angeles, CA&pretty=1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "New York, NY"
+                },
+                {
+                  "key": "finish",
+                  "value": "Los Angeles, CA"
+                },
+                {
+                  "key": "pretty",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "500 miles on a full tank, 10 mpg, 5 gallons at the start."
+          }
+        },
+        {
+          "name": "Short trip: Dallas -> Austin",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=Dallas, TX&finish=Austin, TX&pretty=1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "Dallas, TX"
+                },
+                {
+                  "key": "finish",
+                  "value": "Austin, TX"
+                },
+                {
+                  "key": "pretty",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Trips shorter than the full-tank range are still billed for every mile."
+          }
+        },
+        {
+          "name": "Start far from any station: Houston -> San Antonio",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=Houston, TX&finish=San Antonio, TX&pretty=1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "Houston, TX"
+                },
+                {
+                  "key": "finish",
+                  "value": "San Antonio, TX"
+                },
+                {
+                  "key": "pretty",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "The starting fuel is raised to reach the first station; see vehicle.starting_fuel_adjusted and warnings."
+          }
+        },
+        {
+          "name": "Custom vehicle: Dallas -> Chicago",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=Dallas, TX&finish=Chicago, IL&mpg=8&max_range_miles=300&starting_fuel_gallons=10&pretty=1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "Dallas, TX"
+                },
+                {
+                  "key": "finish",
+                  "value": "Chicago, IL"
+                },
+                {
+                  "key": "mpg",
+                  "value": "8"
+                },
+                {
+                  "key": "max_range_miles",
+                  "value": "300"
+                },
+                {
+                  "key": "starting_fuel_gallons",
+                  "value": "10"
+                },
+                {
+                  "key": "pretty",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "8 mpg, 300 miles on a full tank (37.5 gallons), 10 gallons at the start."
+          }
+        },
+        {
+          "name": "Empty tank at the start: Dallas -> Austin",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=Dallas, TX&finish=Austin, TX&starting_fuel_gallons=0&pretty=1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "Dallas, TX"
+                },
+                {
+                  "key": "finish",
+                  "value": "Austin, TX"
+                },
+                {
+                  "key": "starting_fuel_gallons",
+                  "value": "0"
+                },
+                {
+                  "key": "pretty",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "The first stop is at mile 0."
+          }
+        },
+        {
+          "name": "JSON body: Chicago -> Houston",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"start\": \"Chicago, IL\",\n  \"finish\": \"Houston, TX\",\n  \"mpg\": 8,\n  \"max_range_miles\": 300,\n  \"starting_fuel_gallons\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/route/?pretty=1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "pretty",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "The same fields sent as a JSON object."
+          }
+        },
+        {
+          "name": "Without detour fuel: Dallas -> Chicago",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=Dallas, TX&finish=Chicago, IL&include_detour_fuel=false&pretty=1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "Dallas, TX"
+                },
+                {
+                  "key": "finish",
+                  "value": "Chicago, IL"
+                },
+                {
+                  "key": "include_detour_fuel",
+                  "value": "false"
+                },
+                {
+                  "key": "pretty",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "include_detour_fuel=false bills only the miles along the route."
+          }
+        },
+        {
+          "name": "Estimated stops: Seattle -> San Diego",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=Seattle, WA&finish=San Diego, CA&pretty=1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "Seattle, WA"
+                },
+                {
+                  "key": "finish",
+                  "value": "San Diego, CA"
+                },
+                {
+                  "key": "pretty",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "The price data has no station between mile 258 and 1253; estimated stops at state-average prices fill the gap."
+          }
+        },
+        {
+          "name": "Estimated stops off: Seattle -> San Diego",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=Seattle, WA&finish=San Diego, CA&allow_estimated_stops=false&pretty=1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "Seattle, WA"
+                },
+                {
+                  "key": "finish",
+                  "value": "San Diego, CA"
+                },
+                {
+                  "key": "allow_estimated_stops",
+                  "value": "false"
+                },
+                {
+                  "key": "pretty",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Returns fuel: null with a fuel_error naming the gap."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Input formats",
+      "item": [
+        {
+          "name": "ZIP codes: 10001 -> 60601",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=10001&finish=60601&pretty=1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "10001"
+                },
+                {
+                  "key": "finish",
+                  "value": "60601"
+                },
+                {
+                  "key": "pretty",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Coordinates: Seattle -> Miami",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=47.6062,-122.3321&finish=25.7617,-80.1918&pretty=1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "47.6062,-122.3321"
+                },
+                {
+                  "key": "finish",
+                  "value": "25.7617,-80.1918"
+                },
+                {
+                  "key": "pretty",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Errors (400)",
+      "item": [
+        {
+          "name": "Starting fuel above tank capacity",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=Dallas, TX&finish=Austin, TX&max_range_miles=300&starting_fuel_gallons=40",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "Dallas, TX"
+                },
+                {
+                  "key": "finish",
+                  "value": "Austin, TX"
+                },
+                {
+                  "key": "max_range_miles",
+                  "value": "300"
+                },
+                {
+                  "key": "starting_fuel_gallons",
+                  "value": "40"
+                }
+              ]
+            },
+            "description": "The tank holds 300 / 10 = 30 gallons, so 40 is rejected."
+          }
+        },
+        {
+          "name": "Place outside the USA",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=Toronto, ON&finish=Austin, TX",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "Toronto, ON"
+                },
+                {
+                  "key": "finish",
+                  "value": "Austin, TX"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Missing finish",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=Dallas, TX",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "Dallas, TX"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Range below 50 miles",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=Dallas, TX&finish=Austin, TX&max_range_miles=20",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "Dallas, TX"
+                },
+                {
+                  "key": "finish",
+                  "value": "Austin, TX"
+                },
+                {
+                  "key": "max_range_miles",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "max_range_miles must be between 50 and 2000."
+          }
+        },
+        {
+          "name": "Misspelled city name",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/?start=Dallas, TX&finish=collage station",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "Dallas, TX"
+                },
+                {
+                  "key": "finish",
+                  "value": "collage station"
+                }
+              ]
+            },
+            "description": "Returns a suggestion: did you mean College Station (AR, TX)?"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Map page",
+      "item": [
+        {
+          "name": "Map page: Dallas -> Chicago, custom vehicle",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/map/?start=Dallas, TX&finish=Chicago, IL&mpg=8&max_range_miles=300&starting_fuel_gallons=10",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                "map",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "Dallas, TX"
+                },
+                {
+                  "key": "finish",
+                  "value": "Chicago, IL"
+                },
+                {
+                  "key": "mpg",
+                  "value": "8"
+                },
+                {
+                  "key": "max_range_miles",
+                  "value": "300"
+                },
+                {
+                  "key": "starting_fuel_gallons",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Returns an HTML page; open the URL in a browser to see the map."
+          }
+        },
+        {
+          "name": "Map page: New York -> Los Angeles",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/route/map/?start=New York, NY&finish=Los Angeles, CA",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "route",
+                "map",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "New York, NY"
+                },
+                {
+                  "key": "finish",
+                  "value": "Los Angeles, CA"
+                }
+              ]
+            },
+            "description": "Returns an HTML page; open the URL in a browser to see the map."
+          }
+        }
+      ]
+    }
+  ]
+}
